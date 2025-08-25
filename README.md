@@ -1,4 +1,4 @@
-# Dor YTTA by Flyxt9
+# Dor YTTA by Flyxt
 
 # How to use with TERMUX
 1. Install git & python
