@@ -8,6 +8,7 @@ pkg install python
 2. Clone this repo
 ```
 git clone https://github.com/flyxt/myxl-cli
+cd myxl-cli
 ```
 3. Install dependencies
 ```
