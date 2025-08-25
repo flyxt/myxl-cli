@@ -1,9 +1,10 @@
 # Dor YTTA by Flyxt9
 
 # How to use with TERMUX
-1. Install python
+1. Install git & python
 ```
 pkg install python
+pkg install git
 ```
 2. Clone this repo
 ```
