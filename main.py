@@ -1,0 +1,73 @@
+import sys
+
+from api_request import *
+from ui import *
+from util import load_token
+from paket_xut import get_package_xut
+
+user_data = {
+    "is_logged_in": False,
+    "phone_number": None,
+    "balance": None,
+    "balance_expired_at": None,
+    "tokens": None,
+}
+
+show_menu = True
+def main():
+    while True:
+        updated_user_data = load_token()
+        if updated_user_data:
+            global user_data
+            user_data = updated_user_data
+            
+        show_main_menu(user_data)
+        
+        choice = input("Pilih menu: ")
+        # Logged in
+        if user_data["is_logged_in"]:
+            if choice == "1":
+                print("Changing account...")
+                phone_number = login_prompt()
+                if phone_number:
+                    user_data["phone_number"] = phone_number
+                    continue
+                else:
+                    print("Failed to login. Please try again.")
+                continue
+            elif choice == "2":
+                # XUT 
+                packages = get_package_xut(user_data["tokens"])
+                
+                show_package_menu(user_data["tokens"], packages)
+            elif choice == "99":
+                print("Exiting the application.")
+                sys.exit(0)
+            else:
+                print("Invalid choice. Please try again.")
+                pause()
+        else:
+            # Not logged in
+            if choice == "1":
+                phone_number = login_prompt()
+                if phone_number:
+                    user_data["phone_number"] = phone_number
+                    continue
+                else:
+                    print("Failed to login. Please try again.")
+                pause()
+            elif choice == "99":
+                print("Exiting the application.")
+                sys.exit(0)
+            else:
+                print("Invalid choice. Please try again.")
+                pause()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nExiting the application.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    
