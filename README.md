@@ -1,22 +1,31 @@
 # Dor YTTA by Flyxt
 
 # How to run with TERMUX
-1. Install git & python
+1. Update & Upgrade Termux
 ```
 apt update && apt full-upgrade
-pkg install python
+```
+2. Install Git
+```
 pkg install git
 ```
-2. Clone this repo
+3. Install Python
+```
+pkg install python
+```
+4. Clone this repo
 ```
 git clone https://github.com/flyxt/myxl-cli
+```
+5. Open the folder
+```
 cd myxl-cli
 ```
-3. Install dependencies
+6. Install dependencies
 ```
 pip install -r requirements.txt
 ```
-4. Run the script
+7. Run the script
 ```
 python main.py
 ```
