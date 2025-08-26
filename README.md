@@ -1,8 +1,9 @@
-# Dor YTTA by Flyxt9
+# Dor YTTA by Flyxt
 
-# How to use with TERMUX
+# How to run with TERMUX
 1. Install git & python
 ```
+apt update && apt full-upgrade
 pkg install python
 pkg install git
 ```
