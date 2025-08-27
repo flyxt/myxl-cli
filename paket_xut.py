@@ -12,7 +12,7 @@ def get_package_xut(api_key: str, tokens: dict):
     for variant in package_variants:
         if variant["name"] == "For Xtra Combo":
             for option in variant["package_options"]:
-                if option["name"].lower() in ["vidio", "iflix", "basic"]:
+                if True:
                     friendly_name = option["name"]
                     
                     if friendly_name.lower() == "basic":

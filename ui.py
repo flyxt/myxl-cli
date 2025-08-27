@@ -40,7 +40,8 @@ def show_main_menu(user_data):
         print("--------------------------")
         print("Menu:")
         print("1. Login/Ganti akun")
-        print("2. Paket XUT")
+        print("2. Lihat Paket Saya")
+        print("3. Beli Paket XUT")
         print("99. Tutup aplikasi")
         print("--------------------------")
         

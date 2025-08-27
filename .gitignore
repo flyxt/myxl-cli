@@ -6,3 +6,4 @@ __pycache__/
 menu.txt
 play*
 api.key
+pg*

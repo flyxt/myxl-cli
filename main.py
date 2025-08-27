@@ -4,6 +4,7 @@ from api_request import *
 from ui import *
 from util import load_token, ensure_api_key
 from paket_xut import get_package_xut
+from my_package import fetch_my_packages
 
 user_data = {
     "is_logged_in": False,
@@ -41,6 +42,9 @@ def main():
                     print("Failed to login. Please try again.")
                 continue
             elif choice == "2":
+                fetch_my_packages(api_key, user_data["tokens"])
+                continue
+            elif choice == "3":
                 # XUT 
                 packages = get_package_xut(api_key, user_data["tokens"])
                 
