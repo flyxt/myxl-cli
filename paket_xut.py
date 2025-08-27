@@ -3,10 +3,10 @@ from api_request import send_api_request, get_family
 
 PACKAGE_FAMILY_CODE = "08a3b1e6-8e78-4e45-a540-b40f06871cfe"
 
-def get_package_xut(tokens: dict):
+def get_package_xut(api_key: str, tokens: dict):
     packages = []
     
-    data = get_family(tokens, PACKAGE_FAMILY_CODE)
+    data = get_family(api_key, tokens, PACKAGE_FAMILY_CODE)
     package_variants = data["package_variants"]
     start_number = 1
     for variant in package_variants:

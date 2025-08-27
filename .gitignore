@@ -5,3 +5,4 @@ __pycache__/
 *.ipynb
 menu.txt
 play*
+api.key

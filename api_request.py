@@ -164,12 +164,14 @@ def get_new_token(refresh_token: str) -> str:
     return body
 
 def send_api_request(
+    api_key: str,
     path: str,
     payload_dict: dict,
     id_token: str,
     method: str = "POST",
 ):
     encrypted_payload = encryptsign_xdata(
+        api_key=api_key,
         method=method,
         path=path,
         id_token=id_token,
@@ -202,13 +204,13 @@ def send_api_request(
     resp = requests.post(url, headers=headers, data=json.dumps(body), timeout=30)
 
     try:
-        decrypted_body = decrypt_xdata(json.loads(resp.text))
+        decrypted_body = decrypt_xdata(api_key, json.loads(resp.text))
         return decrypted_body
     except Exception as e:
         print("[decrypt err]", e)
         return resp.text
 
-def get_profile(access_token: str, id_token: str) -> dict:
+def get_profile(api_key: str, access_token: str, id_token: str) -> dict:
     path = "api/v8/profile"
 
     raw_payload = {
@@ -219,11 +221,11 @@ def get_profile(access_token: str, id_token: str) -> dict:
     }
 
     print("Fetching profile...")
-    res = send_api_request(path, raw_payload, id_token, "POST")
+    res = send_api_request(api_key, path, raw_payload, id_token, "POST")
 
     return res.get("data")
 
-def get_balance(id_token: str) -> dict:
+def get_balance(api_key: str, id_token: str) -> dict:
     path = "api/v8/packages/balance-and-credit"
     
     raw_payload = {
@@ -232,7 +234,7 @@ def get_balance(id_token: str) -> dict:
     }
     
     print("Fetching balance...")
-    res = send_api_request(path, raw_payload, id_token, "POST")
+    res = send_api_request(api_key, path, raw_payload, id_token, "POST")
     
     if "data" in res:
         if "balance" in res["data"]:
@@ -241,7 +243,7 @@ def get_balance(id_token: str) -> dict:
         print("Error getting balance:", res.get("error", "Unknown error"))
         return None
     
-def get_family(tokens: dict, family_code: str) -> dict:
+def get_family(api_key: str, tokens: dict, family_code: str) -> dict:
     print("Fetching package family...")
     path = "api/v8/xl-stores/options/list"
     id_token = tokens.get("id_token")
@@ -259,14 +261,14 @@ def get_family(tokens: dict, family_code: str) -> dict:
         "lang": "en"
     }
     
-    res = send_api_request(path, payload_dict, id_token, "POST")
+    res = send_api_request(api_key, path, payload_dict, id_token, "POST")
     if res.get("status") != "SUCCESS":
         print(f"Failed to get family {family_code}")
         return None
     
     return res["data"]
     
-def get_package(tokens: dict, package_option_code: str) -> dict:
+def get_package(api_key: str, tokens: dict, package_option_code: str) -> dict:
     path = "api/v8/xl-stores/options/detail"
     
     raw_payload = {
@@ -285,7 +287,7 @@ def get_package(tokens: dict, package_option_code: str) -> dict:
     }
     
     print("Fetching package...")
-    res = send_api_request(path, raw_payload, tokens["id_token"], "POST")
+    res = send_api_request(api_key, path, raw_payload, tokens["id_token"], "POST")
     
     if "data" not in res:
         print("Error getting package:", res.get("error", "Unknown error"))
@@ -294,6 +296,7 @@ def get_package(tokens: dict, package_option_code: str) -> dict:
     return res["data"]
 
 def send_payment_request(
+    api_key: str,
     payload_dict: dict,
     access_token: str,
     id_token: str,
@@ -304,6 +307,7 @@ def send_payment_request(
     package_code = payload_dict["items"][0]["item_code"]
     
     encrypted_payload = encryptsign_xdata(
+        api_key=api_key,
         method="POST",
         path=path,
         id_token=id_token,
@@ -337,14 +341,14 @@ def send_payment_request(
     resp = requests.post(url, headers=headers, data=json.dumps(body), timeout=30)
     
     try:
-        decrypted_body = decrypt_xdata(json.loads(resp.text))
+        decrypted_body = decrypt_xdata(api_key, json.loads(resp.text))
         return decrypted_body
     except Exception as e:
         print("[decrypt err]", e)
         return resp.text
 
-def purchase_package(tokens: dict, package_option_code: str) -> dict:
-    package_details_data = get_package(tokens, package_option_code)
+def purchase_package(api_key: str, tokens: dict, package_option_code: str) -> dict:
+    package_details_data = get_package(api_key, tokens, package_option_code)
     if not package_details_data:
         print("Failed to get package details for purchase.")
         return None
@@ -364,7 +368,7 @@ def purchase_package(tokens: dict, package_option_code: str) -> dict:
     }
     
     print("Initiating payment...")
-    payment_res = send_api_request(payment_path, payment_payload, tokens["id_token"], "POST")
+    payment_res = send_api_request(api_key, payment_path, payment_payload, tokens["id_token"], "POST")
     if payment_res.get("status") != "SUCCESS":
         print("Failed to initiate payment")
         return None
@@ -425,7 +429,7 @@ def purchase_package(tokens: dict, package_option_code: str) -> dict:
     }
     
     print("Processing purchase...")
-    purchase_result = send_payment_request(settlement_payload, tokens["access_token"], tokens["id_token"], token_payment, ts_to_sign)
+    purchase_result = send_payment_request(api_key, settlement_payload, tokens["access_token"], tokens["id_token"], token_payment, ts_to_sign)
     
     print(f"Purchase result:\n{json.dumps(purchase_result, indent=2)}")
     

@@ -2,7 +2,7 @@ import sys
 
 from api_request import *
 from ui import *
-from util import load_token
+from util import load_token, ensure_api_key
 from paket_xut import get_package_xut
 
 user_data = {
@@ -13,14 +13,19 @@ user_data = {
     "tokens": None,
 }
 
+api_key = ""
+
 show_menu = True
 def main():
+    global api_key
+    api_key = ensure_api_key()
+    
     while True:
-        updated_user_data = load_token()
+        updated_user_data = load_token(api_key)
         if updated_user_data:
             global user_data
             user_data = updated_user_data
-            
+        
         show_main_menu(user_data)
         
         choice = input("Pilih menu: ")
@@ -37,9 +42,9 @@ def main():
                 continue
             elif choice == "2":
                 # XUT 
-                packages = get_package_xut(user_data["tokens"])
+                packages = get_package_xut(api_key, user_data["tokens"])
                 
-                show_package_menu(user_data["tokens"], packages)
+                show_package_menu(api_key, user_data["tokens"], packages)
             elif choice == "99":
                 print("Exiting the application.")
                 sys.exit(0)

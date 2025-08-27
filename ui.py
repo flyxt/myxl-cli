@@ -91,7 +91,7 @@ def login_prompt():
     except Exception as e:
         return None
     
-def show_package_menu(tokens, packages):
+def show_package_menu(api_key, tokens, packages):
     in_package_menu = True
     while in_package_menu:
         clear_screen()
@@ -111,17 +111,17 @@ def show_package_menu(tokens, packages):
             print("Paket tidak ditemukan. Silakan masukan nomor yang benar.")
             continue
         
-        is_done = show_package_details(tokens, selected_pkg["code"])
+        is_done = show_package_details(api_key, tokens, selected_pkg["code"])
         if is_done:
             in_package_menu = False
             return None
     
-def show_package_details(tokens, package_option_code):
+def show_package_details(api_key, tokens, package_option_code):
     clear_screen()
     print("--------------------------")
     print("Detail Paket")
     print("--------------------------")
-    package = get_package(tokens, package_option_code)
+    package = get_package(api_key, tokens, package_option_code)
     if not package:
         print("Failed to load package details.")
         pause()
@@ -143,7 +143,7 @@ def show_package_details(tokens, package_option_code):
     print("Pastikan pulsa mencukupi sebelum membeli paket.")
     choice = input("Apakah Anda yakin membeli paket ini? (y/t): ")
     if choice.lower() == 'y':
-        purchase_package(tokens, package_option_code)
+        purchase_package(api_key, tokens, package_option_code)
         input("Silahkan cek hasil pembelian di aplikasi MyXL. Tekan Enter untuk kembali.")
         return True
     else:
