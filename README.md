@@ -1,5 +1,8 @@
 # Dor YTTA by Flyxt
 
+# How to get API Key
+Chat telegram bot [@fykxt_bot](https://t.me/fykxt_bot) with message `/viewkey`. Copy the API key.
+
 # How to run with TERMUX
 1. Update & Upgrade Termux
 ```
@@ -29,3 +32,4 @@ pip install -r requirements.txt
 ```
 python main.py
 ```
+8. Input your API key when prompted
