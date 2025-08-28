@@ -10,7 +10,7 @@ def get_package_xut(api_key: str, tokens: dict):
     package_variants = data["package_variants"]
     start_number = 1
     for variant in package_variants:
-        if variant["name"] == "For Xtra Combo":
+        if True:
             for option in variant["package_options"]:
                 if True:
                     friendly_name = option["name"]

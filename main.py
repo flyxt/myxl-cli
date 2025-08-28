@@ -5,6 +5,7 @@ from ui import *
 from util import load_token, ensure_api_key
 from paket_xut import get_package_xut
 from my_package import fetch_my_packages
+from paket_custom_family import get_packages_by_family
 
 user_data = {
     "is_logged_in": False,
@@ -49,6 +50,11 @@ def main():
                 packages = get_package_xut(api_key, user_data["tokens"])
                 
                 show_package_menu(api_key, user_data["tokens"], packages)
+            elif choice == "4":
+                family_code = input("Enter family code (or '99' to cancel): ")
+                if family_code == "99":
+                    continue
+                get_packages_by_family(api_key, user_data["tokens"], family_code)
             elif choice == "99":
                 print("Exiting the application.")
                 sys.exit(0)

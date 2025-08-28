@@ -42,6 +42,7 @@ def show_main_menu(user_data):
         print("1. Login/Ganti akun")
         print("2. Lihat Paket Saya")
         print("3. Beli Paket XUT")
+        print("4. Beli Paket Berdasarkan Family Code")
         print("99. Tutup aplikasi")
         print("--------------------------")
         
