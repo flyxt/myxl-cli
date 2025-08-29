@@ -1,8 +1,8 @@
 import os
-import json
 import sys
 from datetime import datetime
 from api_request import get_otp, submit_otp, save_tokens, get_package, purchase_package
+from purchase_api import show_multipayment
 
 def clear_screen():
     print("clearing screen...")
@@ -137,16 +137,23 @@ def show_package_details(api_key, tokens, package_option_code):
     
     title = f"{name1} {name2} {name3}".strip()
     
+    token_confirmation = package["token_confirmation"]
+    
 
     print(f"Nama: {title}")
     print(f"Harga: Rp {price}")
     print(f"SnK MyXL:\n{detail}")
     print("--------------------------")
-    print("Pastikan pulsa mencukupi sebelum membeli paket.")
-    choice = input("Apakah Anda yakin membeli paket ini? (y/t): ")
-    if choice.lower() == 'y':
+    print("1. Beli dengan Pulsa")
+    print("2. Beli dengan E-Wallet")
+    choice = input("Pilih metode pembayaran: ")
+    if choice == '1':
         purchase_package(api_key, tokens, package_option_code)
         input("Silahkan cek hasil pembelian di aplikasi MyXL. Tekan Enter untuk kembali.")
+        return True
+    elif choice == '2':
+        show_multipayment(api_key, tokens, package_option_code, token_confirmation, price)
+        input("Silahkan lakukan pembayaran & cek hasil pembelian di aplikasi MyXL. Tekan Enter untuk kembali.")
         return True
     else:
         print("Purchase cancelled.")

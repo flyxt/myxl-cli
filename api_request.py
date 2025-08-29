@@ -1,7 +1,7 @@
 import json, uuid, requests, time
 from datetime import datetime, timezone, timedelta
 
-from crypto_helper import encryptsign_xdata, java_like_timestamp, ts_gmt7_without_colon, ax_api_signature, decrypt_xdata, API_KEY, make_x_signature_payment, build_encrypted_field
+from crypto_helper import encryptsign_xdata, java_like_timestamp, ts_gmt7_without_colon, ax_api_signature, decrypt_xdata, API_KEY, get_x_signature_payment, build_encrypted_field
 
 BASE_URL = "https://api.myxl.xlaxiata.co.id"
 
@@ -321,7 +321,14 @@ def send_payment_request(
     
     body = encrypted_payload["encrypted_body"]
     
-    x_sig2 = make_x_signature_payment(access_token, ts_to_sign, package_code, token_payment)
+    x_sig = get_x_signature_payment(
+        api_key,
+        access_token,
+        ts_to_sign,
+        package_code,
+        token_payment,
+        "BALANCE"
+    )
     
     headers = {
         "host": "api.myxl.xlaxiata.co.id",
@@ -331,7 +338,7 @@ def send_payment_request(
         "authorization": f"Bearer {id_token}",
         "x-hv": "v3",
         "x-signature-time": str(sig_time_sec),
-        "x-signature": x_sig2,
+        "x-signature": x_sig,
         "x-request-id": str(uuid.uuid4()),
         "x-request-at": java_like_timestamp(x_requested_at),
         "x-version-app": "8.6.0",
