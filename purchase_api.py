@@ -132,7 +132,7 @@ def settlement_multipayment(
         "content-type": "application/json; charset=utf-8",
         "user-agent": "myXL / 8.6.0(1179); com.android.vending; (samsung; SM-N935F; SDK 33; Android 13)",
         "x-api-key": API_KEY,
-        "authorization": f"Bearer {tokens["id_token"]}",
+        "authorization": f"Bearer {tokens['id_token']}",
         "x-hv": "v3",
         "x-signature-time": str(sig_time_sec),
         "x-signature": x_sig,
