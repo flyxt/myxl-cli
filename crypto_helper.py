@@ -8,6 +8,7 @@ AX_API_SIG_KEY_ASCII = b"18b4d589826af50241177961590e6693"
 
 XDATA_DECRYPT_URL = "https://xdata.fuyuki.pw/api/decrypt"
 XDATA_ENCRYPT_SIGN_URL = "https://xdata.fuyuki.pw/api/encryptsign"
+PAYMENT_SIGN_URL = "https://xdata.fuyuki.pw/api/sign-payment"
 
 AES_KEY_ASCII = "5dccbf08920a5527"
 BLOCK = AES.block_size
@@ -109,17 +110,30 @@ def decrypt_xdata(
     else:
         raise Exception(f"Decryption failed: {response.text}")
 
-def make_x_signature_payment(access_token: str, sig_time_sec: int, package_code: str, token_payment:str) -> str:
-    k = b"KRw1fXkLSwZLCU52GiEaNRsXFnURAhUUAH9MFmZZK2gPRDAIBjkMEBYdQkoWYmh2YhQCBEIKLDRbGR0zAk1OV2dXCEUzAz9THSsGGDwgbzVvYR9fQERbcgIxcB1aEh4rEB85dXRjdVsJQgM5DxAUOh4mdS9helFqd1VDRmA2AyMYKBoTE24YPWFLXUdpF2RGJGYhRnggDF0KGDE/FgUVZmFjd3ogKFo+DAkaPlY5PEoXWA4BQ0Y1JCVGPgwJGmAbOSBCVk1TFUtQNS0="
-
-    xor_key = b"MyXL#8.6.0#API#Sign"
-
-    cipher_bytes = base64.b64decode(k)
-    template = _xor(cipher_bytes, xor_key).decode("utf-8")
-
-    key_str = template.format(st=sig_time_sec)
-    key_bytes = key_str.encode("utf-8")
-
-    msg = f"{access_token};{token_payment};{sig_time_sec};BUY_PACKAGE;BALANCE;{package_code};".encode("utf-8")
-
-    return hmac.new(key_bytes, msg, hashlib.sha512).hexdigest()
+def get_x_signature_payment(
+        api_key: str,
+        access_token: str,
+        sig_time_sec: int,
+        package_code: str,
+        token_payment: str,
+        payment_method: str
+    ) -> str:
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": api_key,
+    }
+    
+    request_body = {
+        "access_token": access_token,
+        "sig_time_sec": sig_time_sec,
+        "package_code": package_code,
+        "token_payment": token_payment,
+        "payment_method": payment_method
+    }
+    
+    response = requests.request("POST", PAYMENT_SIGN_URL, json=request_body, headers=headers, timeout=30)
+    
+    if response.status_code == 200:
+        return response.json().get("x_signature")
+    else:
+        raise Exception(f"Signature generation failed: {response.text}")
