@@ -2,7 +2,7 @@ import os
 import sys
 from datetime import datetime
 from api_request import get_otp, submit_otp, save_tokens, get_package, purchase_package
-from purchase_api import show_multipayment
+from purchase_api import show_multipayment, show_qris_payment
 
 def clear_screen():
     print("clearing screen...")
@@ -146,6 +146,7 @@ def show_package_details(api_key, tokens, package_option_code):
     print("--------------------------")
     print("1. Beli dengan Pulsa")
     print("2. Beli dengan E-Wallet")
+    print("3. Bayar dengan QRIS")
     choice = input("Pilih metode pembayaran: ")
     if choice == '1':
         purchase_package(api_key, tokens, package_option_code)
@@ -155,6 +156,11 @@ def show_package_details(api_key, tokens, package_option_code):
         show_multipayment(api_key, tokens, package_option_code, token_confirmation, price)
         input("Silahkan lakukan pembayaran & cek hasil pembelian di aplikasi MyXL. Tekan Enter untuk kembali.")
         return True
+    elif choice == '3':
+        show_qris_payment(api_key, tokens, package_option_code, token_confirmation, price)
+        input("Silahkan lakukan pembayaran & cek hasil pembelian di aplikasi MyXL. Tekan Enter untuk kembali.")
+        return True
+        
     else:
         print("Purchase cancelled.")
         return False
