@@ -1,4 +1,4 @@
-# Dor YTTA by Flyxt 
+# MyXL CLI Client
 
 # How to get API Key
 Chat telegram bot [@fykxt_bot](https://t.me/fykxt_bot) with message `/viewkey`. Copy the API key.
