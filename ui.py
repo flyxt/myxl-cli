@@ -56,7 +56,7 @@ def show_login_menu():
     print("99. Tutup aplikasi")
     print("--------------------------")
     
-def login_prompt():
+def login_prompt(api_key: str):
     clear_screen()
     print("--------------------------")
     print("Request OTP")
@@ -80,7 +80,7 @@ def login_prompt():
             pause()
             return None
         
-        tokens = submit_otp(phone_number, otp)
+        tokens = submit_otp(api_key, phone_number, otp)
         if not tokens:
             print("Gagal login. Periksa OTP dan coba lagi.")
             pause()

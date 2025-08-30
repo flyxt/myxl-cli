@@ -35,7 +35,7 @@ def main():
         if user_data["is_logged_in"]:
             if choice == "1":
                 print("Changing account...")
-                phone_number = login_prompt()
+                phone_number = login_prompt(api_key)
                 if phone_number:
                     user_data["phone_number"] = phone_number
                     continue
@@ -64,7 +64,7 @@ def main():
         else:
             # Not logged in
             if choice == "1":
-                phone_number = login_prompt()
+                phone_number = login_prompt(api_key)
                 if phone_number:
                     user_data["phone_number"] = phone_number
                     continue

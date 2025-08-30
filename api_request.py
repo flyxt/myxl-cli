@@ -59,7 +59,7 @@ def get_otp(contact: str) -> str:
         print(f"Error requesting OTP: {e}")
         return None
     
-def submit_otp(contact: str, code: str):
+def submit_otp(api_key: str, contact: str, code: str):
     if not validate_contact(contact):
         print("Invalid number")
         return None
@@ -73,7 +73,7 @@ def submit_otp(contact: str, code: str):
     now_gmt7 = datetime.now(timezone(timedelta(hours=7)))
     ts_for_sign = ts_gmt7_without_colon(now_gmt7)
     ts_header = ts_gmt7_without_colon(now_gmt7 - timedelta(minutes=5))
-    signature = ax_api_signature(ts_for_sign, contact, code, "SMS")
+    signature = ax_api_signature(api_key, ts_for_sign, contact, code, "SMS")
 
     payload = f"contactType=SMS&code={code}&grant_type=password&contact={contact}&scope=openid"
 
